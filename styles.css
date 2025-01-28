@@ -57,11 +57,6 @@ body {
     margin-right: auto;
     display: block;
 }
-a {
-    display: inline-block; /* Ensure the anchor tag only covers the image */
-    padding: 0; /* Remove any padding around the anchor */
-    margin: 0; /* Remove any margin around the anchor */
-}
 h1 {
     font-weight: normal;
     letter-spacing: .125rem;
