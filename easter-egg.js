@@ -51,7 +51,7 @@ function triggerEmojiAnimation(e) {
   e.preventDefault();
   setTimeout(() => {
     window.open('https://www.instagram.com/Pharm_d51', '_blank');
-  }, 5000);
+  }, 4000);
   
   // Limit to 3 uses per session
   if (!sessionStorage.getItem('eggCount')) sessionStorage.setItem('eggCount', 0);
