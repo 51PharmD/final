@@ -18,8 +18,8 @@ import Spheres1Background from 'https://cdn.jsdelivr.net/npm/threejs-components@
         document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
 
         // Display a message when the countdown ends
-        if (distance < 0) {
-            document.getElementById("headline").innerText = "It's done!";
+        if (distance > 0) {
+            document.getElementById("headline").innerText = "The journey has come to an end, but the memories will stay forever.";
             document.getElementById("countdown").style.display = "none";
             document.getElementById("content").style.display = "block";
             clearInterval(x);
