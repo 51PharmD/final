@@ -1,4 +1,4 @@
-const labEmojis = ["🥼", "💊", "🧪", "🔬", "🦠", "🌡", "💉", "🧫", "📋", "🏥", "🚑", "❤️", "🎓", "👨⚕", "👩⚕"];
+const labEmojis = ["🥼", "🥼", "💊", "🧪", "🔬", "🦠", "💉", "🧫", "📋", "🏥", "🚑", "❤️", "🎓", "🥼", "🥼"];
 
 class EmojiAnimation extends React.Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class EmojiAnimation extends React.Component {
 
   componentDidMount() {
     this.createEmojis();
-    setTimeout(() => this.setState({ emojis: [] }), 3000);
+    setTimeout(() => this.setState({ emojis: [] }), 5000);
   }
 
   createEmojis() {
@@ -51,7 +51,7 @@ function triggerEmojiAnimation(e) {
   e.preventDefault();
   setTimeout(() => {
     window.open('https://www.instagram.com/Pharm_d51', '_blank');
-  }, 3000);
+  }, 5000);
   
   // Limit to 3 uses per session
   if (!sessionStorage.getItem('eggCount')) sessionStorage.setItem('eggCount', 0);
