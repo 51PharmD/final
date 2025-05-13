@@ -24,6 +24,7 @@
             opacity: 0.8;
             pointer-events: none;
         } */
+        
         /* .lanterns {
             position: fixed;
             top: 0;
@@ -35,8 +36,8 @@
             z-index: 10;
             animation: floatLanterns 4s ease-in-out infinite;
             pointer-events: none;
+        } } */
 
-        } */
        /* .colorful-paper {
             position: fixed;
             bottom: 0;
@@ -54,18 +55,37 @@
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0); }
            } */
+
+        /* Easter Egg Styles */
+        #emoji-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            animation: floatUp 3s ease-out forwards;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0.2); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <canvas id="webgl-canvas"></canvas>
         <div class="container">
-            <!-- Remove the <a> tag and use the <map> for clickable areas -->
-            <img src="51GoldenLogo.png" alt="Logo" class="logo" usemap="#logoMap">
-            <map name="logoMap">
-                <!-- Use the coordinates provided -->
-                <area shape="poly" coords="10,10,10,64,92,145,10,145,10,180,250,180,304,126,358,180,441,180,271,10" href="https://www.instagram.com/Pharm_d51" target="_blank" alt="Logo">
-            </map>
+            <!-- Modified logo section - removed usemap and added onclick -->
+            <img src="51GoldenLogo.png" alt="Logo" class="logo" id="main-logo" onclick="triggerEmojiAnimation(event)">
             <h1 id="headline" class="particletext confetti">The Final Countdown</h1>
             <div id="countdown">
                 <ul>
@@ -83,10 +103,20 @@
         </div>
     </div>
 
-    <div class="lanterns"></div> <!-- Adding the lanterns here -->
+    <div class="lanterns"></div>
+    <div id="emoji-container"></div>
 
-    <script type="module" src="script.js"></script> <!-- Your existing JavaScript file -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Ensure jQuery is included -->
-    <script src="particles.js" defer></script> <!-- Add new particle JS -->
+    <!-- React and Babel for Easter egg -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    
+    <!-- Existing scripts -->
+    <script type="module" src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="particles.js" defer></script>
+    
+    <!-- Easter egg script -->
+    <script type="text/babel" src="easter-egg.js"></script>
 </body>
 </html>
