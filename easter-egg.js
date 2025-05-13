@@ -25,7 +25,7 @@ class EmojiAnimation extends React.Component {
     return {
       left: `${Math.random() * 100}%`,
       animationDelay: `${Math.random() * 1}s`,
-      fontSize: `${Math.random() * 2 + 1}rem`
+      fontSize: `${Math.random() * 4 + 3}rem`
     };
   }
 
