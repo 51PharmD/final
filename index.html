@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>51's Final Countdown</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Your existing CSS file -->
-    <link rel="stylesheet" href="particles.css"> <!-- Add new particle CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="particles.css">
     <style>
         body {
             margin: 0;
@@ -24,8 +24,7 @@
             opacity: 0.8;
             pointer-events: none;
         } */
-        
-        /* .lanterns {
+       /* .lanterns {
             position: fixed;
             top: 0;
             left: 0;
@@ -36,8 +35,7 @@
             z-index: 10;
             animation: floatLanterns 4s ease-in-out infinite;
             pointer-events: none;
-        } } */
-
+        } */
        /* .colorful-paper {
             position: fixed;
             bottom: 0;
@@ -48,16 +46,15 @@
             background-repeat: repeat-x;
             z-index: 0;
             pointer-events: none;
-
         } */
        /* @keyframes floatLanterns {
             0% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0); }
-           } */
+        } */
 
         /* Easter Egg Styles */
-        #emoji-container {
+        #easter-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -66,17 +63,27 @@
             pointer-events: none;
             z-index: 9999;
         }
-
-        .floating-emoji {
+        
+        .emoji-float {
             position: absolute;
-            animation: floatUp 3s ease-out forwards;
+            font-size: 1.5rem;
+            animation: emojiFloat 3s ease-out forwards;
             opacity: 0.9;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            will-change: transform;
         }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100vh) scale(0.2); opacity: 0; }
+        
+        @keyframes emojiFloat {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50vw + var(--random-x)), -100vh) 
+                          rotate(var(--random-rotate)) 
+                          scale(0.2);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -84,8 +91,10 @@
     <div id="app">
         <canvas id="webgl-canvas"></canvas>
         <div class="container">
-            <!-- Modified logo section - removed usemap and added onclick -->
-            <img src="51GoldenLogo.png" alt="Logo" class="logo" id="main-logo" onclick="triggerEmojiAnimation(event)">
+            <img src="51GoldenLogo.png" alt="Logo" class="logo" id="easter-logo" usemap="#logoMap">
+            <map name="logoMap">
+                <area shape="poly" coords="10,10,10,64,92,145,10,145,10,180,250,180,304,126,358,180,441,180,271,10" href="https://www.instagram.com/Pharm_d51" target="_blank" alt="Logo">
+            </map>
             <h1 id="headline" class="particletext confetti">The Final Countdown</h1>
             <div id="countdown">
                 <ul>
@@ -104,19 +113,11 @@
     </div>
 
     <div class="lanterns"></div>
-    <div id="emoji-container"></div>
+    <div id="easter-container"></div>
 
-    <!-- React and Babel for Easter egg -->
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    
-    <!-- Existing scripts -->
     <script type="module" src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="particles.js" defer></script>
-    
-    <!-- Easter egg script -->
-    <script type="text/babel" src="easter-egg.js"></script>
+    <script src="easter-egg.js" defer></script>
 </body>
 </html>
