@@ -4,7 +4,7 @@ class EmojiAnimation extends React.Component {
   constructor(props) {
     super(props);
     this.state = { emojis: [] };
-    this.emojiCount = 30;
+    this.emojiCount = 15;
   }
 
   componentDidMount() {
