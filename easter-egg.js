@@ -1,4 +1,4 @@
-const labEmojis = ["🥼", "🥼", "🥼", "🥼"];
+const labEmojis = ["🎓", "🎓", "🎓", "🎓"];
 
 class EmojiAnimation extends React.Component {
   constructor(props) {
