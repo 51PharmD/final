@@ -97,15 +97,32 @@
             box-sizing: border-box;
             background-color: transparent;
             text-align: center;
-            /* Added min-width to ensure the wrapper expands with its content to allow measurement */
-            min-width: 1px; /* Important for accurate width measurement when `white-space: nowrap` is applied to children */
+            /* Removed min-width as nowrap is removed */
         }
 
         /* Styles for individual course spans within the wrapper */
         .course-text-content-wrapper span {
-            display: inline-block; /* Changed to inline-block to allow dynamic width based on content */
+            display: block; /* Ensure each course takes its own line */
             margin: 0.1rem 0; /* Small vertical margin between lines */
-            white-space: nowrap; /* Prevent words from breaking */
+            /* Removed white-space: nowrap; to allow natural wrapping */
+            word-break: normal; /* Ensures words do not break */
+            /* Tailwind classes for responsive font sizing */
+            font-size: 2.25rem; /* text-4xl */
+            line-height: 2.5rem; /* leading-tight */
+        }
+
+        /* Responsive font sizes */
+        @media (min-width: 640px) { /* sm breakpoint */
+            .course-text-content-wrapper span {
+                font-size: 3rem; /* sm:text-5xl */
+                line-height: 1; /* sm:leading-none */
+            }
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .course-text-content-wrapper span {
+                font-size: 3.75rem; /* md:text-6xl */
+                line-height: 1; /* md:leading-none */
+            }
         }
 
         /* Styles for the new countdown display */
@@ -251,56 +268,6 @@
             });
         }
 
-        /**
-         * Adjusts the font size of the text within the course display to ensure it fits
-         * its container without breaking words.
-         * @param {HTMLElement} h1Element The h1#course-display element.
-         * @param {number} initialFontSize The starting font size in pixels.
-         * @param {number} minFontSize The minimum allowed font size in pixels.
-         */
-        function adjustFontSize(h1Element, initialFontSize, minFontSize = 10) {
-            const textContentWrapper = h1Element.querySelector('.course-text-content-wrapper');
-            if (!textContentWrapper) {
-                console.error("Course text content wrapper not found.");
-                return;
-            }
-
-            // Get the effective available width of the h1 container for the text
-            const availableWidth = h1Element.clientWidth - (parseFloat(getComputedStyle(h1Element).paddingLeft) || 0) - (parseFloat(getComputedStyle(h1Element).paddingRight) || 0);
-
-            const spans = textContentWrapper.querySelectorAll('span');
-
-            // Set initial font size for all spans and measure the widest span's scrollWidth
-            let tempMaxFontSize = initialFontSize;
-            let widestSpanScrollWidth = 0;
-
-            // Apply temp font size to all spans for initial measurement
-            spans.forEach(span => {
-                span.style.fontSize = `${tempMaxFontSize}px`;
-                if (span.scrollWidth > widestSpanScrollWidth) {
-                    widestSpanScrollWidth = span.scrollWidth;
-                }
-            });
-
-            // If the widest span already fits within the available width, no adjustment is needed
-            if (widestSpanScrollWidth <= availableWidth && widestSpanScrollWidth > 0) {
-                return;
-            }
-
-            // Calculate a more precise scale factor based on the widest span's current width
-            let scaleFactor = availableWidth / widestSpanScrollWidth;
-            let finalFontSize = tempMaxFontSize * scaleFactor;
-
-            // Ensure the final font size is not below the minimum allowed font size
-            finalFontSize = Math.max(finalFontSize, minFontSize);
-
-            // Apply the calculated final font size to all spans
-            spans.forEach(span => {
-                span.style.fontSize = `${finalFontSize}px`;
-            });
-        }
-
-
         // Function to start shuffling courses for the current semester
         function startShufflingCoursesForCurrentSemester() {
             const currentSemesterNumber = semesterOrder[currentSemesterIndex];
@@ -324,9 +291,7 @@
             // Function to display a single course item (main + electives)
             const displayCourseItem = (item) => {
                 let innerContent = '';
-                // No fixed font size class here, let JS adjust it
-                const initialFontSize = 55; // A generous starting font size in pixels
-
+                
                 if (item.isElectiveGroup) {
                     // Each elective on a new line with 50% opacity
                     innerContent = item.electiveCourses.map(elective =>
@@ -337,12 +302,9 @@
                     innerContent = `<span class="text-black">${item.mainCourse}</span>`;
                 }
 
-                // Wrap the content with a div
+                // Wrap the content with a div. Responsive font classes are now applied directly to spans in CSS.
                 courseDisplay.innerHTML = `<div class="course-text-content-wrapper">${innerContent}</div>`;
                 courseDisplay.style.animationDuration = `${animationDurationSeconds}s`;
-
-                // Adjust font size immediately after setting content
-                adjustFontSize(courseDisplay, initialFontSize);
 
                 // Reset animation state and re-trigger for smooth transition
                 courseDisplay.style.animationName = 'none'; // Temporarily unset animation
