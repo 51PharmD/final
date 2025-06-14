@@ -97,14 +97,12 @@
             box-sizing: border-box;
             background-color: transparent;
             text-align: center;
-            /* Removed min-width as nowrap is removed */
         }
 
         /* Styles for individual course spans within the wrapper */
         .course-text-content-wrapper span {
             display: block; /* Ensure each course takes its own line */
             margin: 0.1rem 0; /* Small vertical margin between lines */
-            /* Removed white-space: nowrap; to allow natural wrapping */
             word-break: normal; /* Ensures words do not break */
             /* Tailwind classes for responsive font sizing */
             font-size: 2.25rem; /* text-4xl */
@@ -125,13 +123,28 @@
             }
         }
 
-        /* Styles for the new countdown display */
+        /* New styles for the countdown circle container */
+        .countdown-circle {
+            background-color: #000000; /* Black circle */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px; /* Smaller circle */
+            height: 60px; /* Smaller circle */
+            margin-top: 1rem; /* Space between course text and countdown */
+            position: relative; /* For potential layering */
+            overflow: hidden; /* Ensure text clipping works */
+        }
+
+        /* Styles for the countdown display */
         #countdown-display {
-            font-size: 3rem; /* Large font size for visibility */
-            color: #000000; /* Pure black text color */
-            margin-top: 0.5rem; /* Space between course text and countdown */
-            margin-bottom: 0; /* No bottom margin needed */
-            transition: opacity 0.5s ease-out; /* For fading out at the end */
+            font-size: 2.5rem; /* Smaller font size for the number */
+            color: #FFFFFF; /* White text color initially, for the cutout effect */
+            margin: 0; /* Remove default paragraph margin */
+            /* Cutout effect */
+            mix-blend-mode: screen; /* This will make white areas transparent against a black background */
+            -webkit-font-smoothing: antialiased; /* Ensure smooth edges for the cutout */
         }
     </style>
 </head>
@@ -170,7 +183,9 @@
         </h1>
 
         <!-- Countdown Display -->
-        <p id="countdown-display"></p>
+        <div class="countdown-circle">
+            <p id="countdown-display"></p>
+        </div>
     </div>
 
     <script>
@@ -344,7 +359,7 @@
             courseDisplay.style.animationName = 'none';
 
             // Phase 1: Fade out countdown and course text
-            countdownDisplay.style.opacity = 0;
+            countdownDisplay.parentElement.style.opacity = 0; // Fade out the circle container
             courseDisplay.style.opacity = 0;
             
             // Get the cap's current position relative to the viewport
@@ -408,10 +423,10 @@
         window.onload = startSemesterCountdown;
 
        // Wait for the entire animation sequence to complete (10 semesters × 1 second each)
-       setTimeout(function() {
-    // Redirect without .html extension
-    window.location.href = "/final/countdown"; 
-}, 12000);
+        setTimeout(function() {
+            // Redirect without .html extension
+            window.location.href = "/final/countdown";
+        }, 12000);
     </script>
 </body>
 </html>
