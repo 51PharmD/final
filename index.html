@@ -22,7 +22,7 @@
             flex-direction: column; /* Allows content to shrink/grow vertically within padding */
             align-items: center; /* Center horizontally */
             justify-content: center; /* Center vertically within the available space */
-            padding: 2rem 1rem; /* Adjusted padding as buttons are removed */
+            padding: 2rem 0; /* Only vertical padding on body now */
             margin: 0;
             position: relative; /* Needed for any potential absolute positioning within body */
             overflow: hidden; /* Prevent scrollbars during animations */
@@ -48,9 +48,8 @@
             display: flex;
             flex-direction: column; /* Stack elements vertically */
             align-items: center; /* Center items horizontally within the column */
-            width: 100%; /* Allow it to take full width for text centering */
-            max-width: 90%; /* Prevent text from being too wide on very large screens */
-            padding: 0; /* Padding is now on the body */
+            width: 100%; /* Allows it to take full width */
+            padding: 0; /* No padding */
             box-sizing: border-box; /* Include padding in width calculation */
             /* Add transition for this wrapper's children for smooth fade-out */
             transition: opacity 0.5s ease-out; /* This will fade out the whole group (except cap's final animation) */
@@ -79,7 +78,7 @@
 
         /* The h1 will now primarily be a flex container for the .course-text-content-wrapper */
         h1 {
-            width: 100%;
+            width: 100%; /* Ensures h1 itself takes full width */
             display: flex; /* Make h1 a flex container to center its child div */
             justify-content: center; /* Center the inner wrapper horizontally */
             align-items: center; /* Vertically center if h1 had fixed height, not critical here */
@@ -87,34 +86,40 @@
             min-height: 100px; /* Give it a minimum height to avoid jumping when text changes */
         }
 
-        /* Wrapper for course text content - now a flex container for individual cutout spans */
+        /* Wrapper for course text content - now full width with no horizontal padding */
         .course-text-content-wrapper {
-            padding: 0; /* Padding moves to individual spans */
+            padding: 0; /* Removed horizontal padding here */
             display: flex;
-            flex-direction: row; /* Arrange items in a row */
-            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            flex-direction: column; /* Arrange items in a column, as spans are now block-level */
             justify-content: center; /* Center items horizontally */
-            align-items: center;
+            align-items: center; /* Align items in the center horizontally */
             box-sizing: border-box;
             background-color: transparent; /* No background on wrapper itself */
-            text-align: center; /* No longer directly relevant as spans are inline-block */
+            text-align: center; /* Centers text within the block spans */
+            width: 100%; /* Ensures this wrapper spans full width */
         }
 
         /* Styles for individual course spans within the wrapper */
         .course-text-content-wrapper span {
-            display: inline-block; /* Allows side-by-side arrangement and wrapping */
-            margin: 0.2rem; /* Small margin for separation between cutouts */
+            display: block; /* Forces each span to its own line */
+            width: 100%; /* Makes each span fill the full width of its parent (.course-text-content-wrapper) */
+            margin-bottom: 0.4rem; /* Vertical margin for separation between boxes */
             padding: 0.2em 0.5em; /* Padding for the black background around the text */
             word-break: normal; /* Ensures words do not break */
             background-color: #000000; /* Black background for each individual cutout */
             color: #FFFFFF; /* White text color for cutout effect */
             mix-blend-mode: screen; /* Makes white text transparent over a black background */
             -webkit-font-smoothing: antialiased; /* Ensure smooth edges for the cutout */
-            border-radius: 0.25rem; /* Slightly rounded corners for the black boxes */
+            border-radius: 0rem; /* No Slightly rounded corners for the black boxes */
 
             /* Tailwind classes for responsive font sizing */
             font-size: 2.25rem; /* text-4xl */
             line-height: 2.5rem; /* leading-tight */
+        }
+
+        /* Remove bottom margin from the last span in the list */
+        .course-text-content-wrapper span:last-child {
+            margin-bottom: 0;
         }
 
         /* Responsive font sizes */
