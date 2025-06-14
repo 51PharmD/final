@@ -408,10 +408,10 @@
         window.onload = startSemesterCountdown;
 
        // Wait for the entire animation sequence to complete (10 semesters × 1 second each)
-        setTimeout(function() {
-            // Redirect to main page after animation finishes
-            window.location.href = "countdown.html";
-        }, 12000); // 10 seconds total for 10 semesters
+       setTimeout(function() {
+    // Redirect without .html extension
+    window.location.href = "/final/countdown/"; // Note the trailing slash
+}, 12000);
     </script>
 </body>
 </html>
