@@ -84,6 +84,7 @@
             justify-content: center; /* Center the inner wrapper horizontally */
             align-items: center; /* Vertically center if h1 had fixed height, not critical here */
             transition: opacity 0.5s ease-out; /* Add a transition for opacity to h1 to ensure smooth fade-out */
+            min-height: 100px; /* Give it a minimum height to avoid jumping when text changes */
         }
 
         /* Wrapper for course text content */
@@ -91,19 +92,20 @@
             padding: 0;
             display: flex;
             flex-direction: column; /* Stack items vertically */
-            flex-wrap: wrap; /* Allow content to wrap within this container if a single span is too long */
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
             background-color: transparent;
             text-align: center;
+            /* Added min-width to ensure the wrapper expands with its content to allow measurement */
+            min-width: 1px; /* Important for accurate width measurement when `white-space: nowrap` is applied to children */
         }
 
         /* Styles for individual course spans within the wrapper */
         .course-text-content-wrapper span {
-            display: block; /* Ensure each course takes its own line */
+            display: inline-block; /* Changed to inline-block to allow dynamic width based on content */
             margin: 0.1rem 0; /* Small vertical margin between lines */
-            word-break: break-word; /* Ensures long words break if needed */
+            white-space: nowrap; /* Prevent words from breaking */
         }
 
         /* Styles for the new countdown display */
@@ -146,7 +148,7 @@
             </g>
         </svg>
 
-        <h1 id="course-display" class="text-4xl sm:text-5xl md:text-6xl mx-auto text-center course-animation">
+        <h1 id="course-display" class="mx-auto text-center course-animation">
             <!-- Course text will be set by JS -->
         </h1>
 
@@ -249,6 +251,56 @@
             });
         }
 
+        /**
+         * Adjusts the font size of the text within the course display to ensure it fits
+         * its container without breaking words.
+         * @param {HTMLElement} h1Element The h1#course-display element.
+         * @param {number} initialFontSize The starting font size in pixels.
+         * @param {number} minFontSize The minimum allowed font size in pixels.
+         */
+        function adjustFontSize(h1Element, initialFontSize, minFontSize = 10) {
+            const textContentWrapper = h1Element.querySelector('.course-text-content-wrapper');
+            if (!textContentWrapper) {
+                console.error("Course text content wrapper not found.");
+                return;
+            }
+
+            // Get the effective available width of the h1 container for the text
+            const availableWidth = h1Element.clientWidth - (parseFloat(getComputedStyle(h1Element).paddingLeft) || 0) - (parseFloat(getComputedStyle(h1Element).paddingRight) || 0);
+
+            const spans = textContentWrapper.querySelectorAll('span');
+
+            // Set initial font size for all spans and measure the widest span's scrollWidth
+            let tempMaxFontSize = initialFontSize;
+            let widestSpanScrollWidth = 0;
+
+            // Apply temp font size to all spans for initial measurement
+            spans.forEach(span => {
+                span.style.fontSize = `${tempMaxFontSize}px`;
+                if (span.scrollWidth > widestSpanScrollWidth) {
+                    widestSpanScrollWidth = span.scrollWidth;
+                }
+            });
+
+            // If the widest span already fits within the available width, no adjustment is needed
+            if (widestSpanScrollWidth <= availableWidth && widestSpanScrollWidth > 0) {
+                return;
+            }
+
+            // Calculate a more precise scale factor based on the widest span's current width
+            let scaleFactor = availableWidth / widestSpanScrollWidth;
+            let finalFontSize = tempMaxFontSize * scaleFactor;
+
+            // Ensure the final font size is not below the minimum allowed font size
+            finalFontSize = Math.max(finalFontSize, minFontSize);
+
+            // Apply the calculated final font size to all spans
+            spans.forEach(span => {
+                span.style.fontSize = `${finalFontSize}px`;
+            });
+        }
+
+
         // Function to start shuffling courses for the current semester
         function startShufflingCoursesForCurrentSemester() {
             const currentSemesterNumber = semesterOrder[currentSemesterIndex];
@@ -272,21 +324,25 @@
             // Function to display a single course item (main + electives)
             const displayCourseItem = (item) => {
                 let innerContent = '';
-                const fontSizeClass = 'text-5xl'; // Consistent font size for all course text
+                // No fixed font size class here, let JS adjust it
+                const initialFontSize = 55; // A generous starting font size in pixels
 
                 if (item.isElectiveGroup) {
                     // Each elective on a new line with 50% opacity
                     innerContent = item.electiveCourses.map(elective =>
-                        `<span class="text-black text-opacity-50 ${fontSizeClass}">${elective}</span>`
+                        `<span class="text-black text-opacity-50">${elective}</span>`
                     ).join(''); // Each span is block, so no extra separator needed
                 } else {
                     // Standard course display
-                    innerContent = `<span class="text-black ${fontSizeClass}">${item.mainCourse}</span>`;
+                    innerContent = `<span class="text-black">${item.mainCourse}</span>`;
                 }
 
                 // Wrap the content with a div
                 courseDisplay.innerHTML = `<div class="course-text-content-wrapper">${innerContent}</div>`;
                 courseDisplay.style.animationDuration = `${animationDurationSeconds}s`;
+
+                // Adjust font size immediately after setting content
+                adjustFontSize(courseDisplay, initialFontSize);
 
                 // Reset animation state and re-trigger for smooth transition
                 courseDisplay.style.animationName = 'none'; // Temporarily unset animation
@@ -394,8 +450,6 @@
             // Redirect to main page after animation finishes
             window.location.href = "countdown.html";
         }, 11000); // 10 seconds total for 10 semesters
-
-  
     </script>
 </body>
 </html>
