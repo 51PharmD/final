@@ -11,7 +11,7 @@
             font-family: Arial; /* Strictly Arial font as requested */
             font-weight: 900; /* Made the font even heavier/bolder */
             background-color: #FFFFFF; /* Pure white background */
-            color: #000000; /* Pure black text color */
+            color: #000000; /* Pure black text color, default for other elements */
             /* Added font smoothing for smoother edges */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -87,23 +87,31 @@
             min-height: 100px; /* Give it a minimum height to avoid jumping when text changes */
         }
 
-        /* Wrapper for course text content */
+        /* Wrapper for course text content - now a flex container for individual cutout spans */
         .course-text-content-wrapper {
-            padding: 0;
+            padding: 0; /* Padding moves to individual spans */
             display: flex;
-            flex-direction: column; /* Stack items vertically */
-            justify-content: center;
+            flex-direction: row; /* Arrange items in a row */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: center; /* Center items horizontally */
             align-items: center;
             box-sizing: border-box;
-            background-color: transparent;
-            text-align: center;
+            background-color: transparent; /* No background on wrapper itself */
+            text-align: center; /* No longer directly relevant as spans are inline-block */
         }
 
         /* Styles for individual course spans within the wrapper */
         .course-text-content-wrapper span {
-            display: block; /* Ensure each course takes its own line */
-            margin: 0.1rem 0; /* Small vertical margin between lines */
+            display: inline-block; /* Allows side-by-side arrangement and wrapping */
+            margin: 0.2rem; /* Small margin for separation between cutouts */
+            padding: 0.2em 0.5em; /* Padding for the black background around the text */
             word-break: normal; /* Ensures words do not break */
+            background-color: #000000; /* Black background for each individual cutout */
+            color: #FFFFFF; /* White text color for cutout effect */
+            mix-blend-mode: screen; /* Makes white text transparent over a black background */
+            -webkit-font-smoothing: antialiased; /* Ensure smooth edges for the cutout */
+            border-radius: 0.25rem; /* Slightly rounded corners for the black boxes */
+
             /* Tailwind classes for responsive font sizing */
             font-size: 2.25rem; /* text-4xl */
             line-height: 2.5rem; /* leading-tight */
@@ -123,7 +131,12 @@
             }
         }
 
-        /* New styles for the countdown circle container */
+        /* New class for 50% opaque elective cutout boxes */
+        .elective-transparent {
+            background-color: rgba(0, 0, 0, 0.5); /* 50% opaque black */
+        }
+
+        /* Styles for the countdown circle container */
         .countdown-circle {
             background-color: #000000; /* Black circle */
             border-radius: 50%;
@@ -142,8 +155,8 @@
             font-size: 2.5rem; /* Smaller font size for the number */
             color: #FFFFFF; /* White text color initially, for the cutout effect */
             margin: 0; /* Remove default paragraph margin */
-            /* Cutout effect */
-            mix-blend-mode: screen; /* This will make white areas transparent against a black background */
+            /* Cutout effect - applied to the text itself over the black circle */
+            mix-blend-mode: screen; 
             -webkit-font-smoothing: antialiased; /* Ensure smooth edges for the cutout */
         }
     </style>
@@ -308,10 +321,10 @@
                 let innerContent = '';
                 
                 if (item.isElectiveGroup) {
-                    // Each elective on a new line with 50% opacity
+                    // Each elective gets its own span for individual cutout effect and transparency
                     innerContent = item.electiveCourses.map(elective =>
-                        `<span class="text-black text-opacity-50">${elective}</span>`
-                    ).join(''); // Each span is block, so no extra separator needed
+                        `<span class="text-black elective-transparent">${elective}</span>`
+                    ).join(''); 
                 } else {
                     // Standard course display
                     innerContent = `<span class="text-black">${item.mainCourse}</span>`;
