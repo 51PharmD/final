@@ -113,3 +113,29 @@ button {
     border: 1px solid grey;
     padding: 4px 8px;
 }
+
+.graduation-cap {
+  position: absolute;
+  font-size: 4rem; /* size relative to logo - adjust as needed */
+  top: -3.7rem; /* pulls the cap up so it overlaps the logo */
+  left: 45%;
+  transform: translateX(-50%) rotate(15deg); /* centers and tilts slightly */
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  animation: float 2s ease-in-out infinite;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .graduation-cap {
+    font-size: 2.8rem;
+    top: -2.2rem;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) rotate(-15deg) translateY(0); }
+  50% { transform: translateX(-50%) rotate(15deg) translateY(-5px); }
+}
